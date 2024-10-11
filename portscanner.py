@@ -3,6 +3,8 @@ import time
 from PyQt5.QtWidgets import *
 from ipaddress import ip_address
 
+def submit():
+    print("pressed")
 
 def gui():
     app = QApplication([])
@@ -15,8 +17,9 @@ def gui():
     ip_address_field = QLineEdit()
     ports = QLabel("Ports")
     ports_field = QLineEdit()
-    submit_button = QPushButton("submit")
 
+    submit_button = QPushButton("submit")
+    submit_button.clicked.connect(submit)
 
     layout.addWidget(gui)
     layout.addWidget(ip_address)
