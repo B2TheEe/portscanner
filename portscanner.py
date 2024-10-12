@@ -4,7 +4,14 @@ from PyQt5.QtWidgets import *
 from ipaddress import ip_address
 import sys
 
-
+def scanner(ip,port):
+    try:
+        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        sock.settimeout(0.5)
+        sock.connect(ip,port)
+        print(f"Port {port} is open")
+    except:
+        None
 
 
 class Window(QDialog):
@@ -23,7 +30,7 @@ class Window(QDialog):
         self.ports_field = QLineEdit()
 
         self.submit_button = QPushButton("submit")
-        self.submit_button.clicked.connect(self.input)
+        self.submit_button.clicked.connect(self.test)
 
         self.layout.addWidget(self.gui)
         self.layout.addWidget(self.ip_address)
@@ -41,27 +48,19 @@ class Window(QDialog):
         self.window.show()
         self.app.exec()
 
-    def input(self,ip_address, ports):
-        print("pressed")
-        print(self.ip_address)
-        print(self.ports)
+    def test(self):  # <- With "self"
+        print("Test")
+        print(self.ip_address_field.text())
+        print(self.ports_field.text())
 
 
 
 
-def scanner(ip,port):
-    try:
-        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        sock.settimeout(0.5)
-        sock.connect(ip,port)
-        print(f"Port {port} is open")
-    except:
-        None
+
 
 def main():
     # create pyqt5 app
     app = QApplication(sys.argv)
-
     # create the instance of our Window
     window = Window()
 
