@@ -12,6 +12,12 @@ def scanner(ip,port):
         print(f"Port {port} is open")
     except:
         None
+def check_ip(addr):
+    try:
+        socket.inet_aton(addr)
+        return True
+    except socket.error:
+        return False
 
 
 class Window(QDialog):
@@ -50,9 +56,10 @@ class Window(QDialog):
 
     def test(self):  # <- With "self"
         print("Test")
-        print(self.ip_address_field.text())
+        ip = self.ip_address_field.text()
+        isip = check_ip(ip)
+        print(isip)
         print(self.ports_field.text())
-
 
 
 
