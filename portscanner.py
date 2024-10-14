@@ -32,10 +32,11 @@ class Window(QDialog):
         super(Window, self).__init__()
         self.app = QApplication([])
         self.app.setStyle('Fusion')
-
+        title = "Port scanner"
+        self.setWindowTitle(title)
         self.window = QWidget()
         self.layout = QVBoxLayout()
-        self.gui = QLabel('GUI')
+
 
         self.ip_address = QLabel("IP Address")
         self.ip_address_field = QLineEdit()
@@ -48,15 +49,15 @@ class Window(QDialog):
         self.output_ipv4 = QLabel()
         self.output = QLabel()
 
-        self.layout.addWidget(self.gui)
+
         self.layout.addWidget(self.ip_address)
         self.layout.addWidget(self.ip_address_field)
         self.layout.addWidget(self.ports)
         self.layout.addWidget(self.ports_field)
         self.layout.addWidget(self.submit_button)
         self.layout.addWidget(self.output_ipv4)
+        self.layout.addWidget(self.output)
 
-        self.gui.show()
         self.ip_address.show()
         self.ports.show()
 
@@ -71,7 +72,7 @@ class Window(QDialog):
         print(self.ports_field.text())
         ports_input = self.ports_field.text()
         des_ports_input = ports_input.split(",")
-
+        output_ports = ""
         print(des_ports_input)
         for i in des_ports_input:
             scan_string = ("Scanning ip {ip} and port {p} ".format(ip=ip,p=i))
@@ -79,11 +80,13 @@ class Window(QDialog):
             output_text = ""
             result = scanner(ip,i)
             if result is False:
-
-                self.output.setText(output_text)
+               print("IP and port {port} aren't available".format(port=i))
+               output_text = "IP and port {port} aren't available".format(port=i)
+               output_ports = output_ports+output_text
             else:
-                self.output.setText(output_text)
-
+                output_string = "Port {port} open at ip {ip]"
+                output_ports = output_ports+output_string
+            self.output.setText(output_ports)
 
     def get_ipv4_address(self):
         ip = self.ip_address_field.text()
