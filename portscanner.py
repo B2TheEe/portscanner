@@ -1,17 +1,24 @@
 import socket
 import time
+from xmlrpc.client import Boolean
+
 from PyQt5.QtWidgets import *
 from ipaddress import ip_address
 import sys
 
 def scanner(ip,port):
+    result = None
     try:
         sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         sock.settimeout(0.5)
         sock.connect(ip,port)
         print(f"Port {port} is open")
+        result = True
+        return result
     except:
-        None
+        result = False
+        return result
+
 def check_ip(addr):
     try:
         socket.inet_aton(addr)
@@ -38,12 +45,16 @@ class Window(QDialog):
         self.submit_button = QPushButton("submit")
         self.submit_button.clicked.connect(self.test)
 
+        self.output_ipv4 = QLabel()
+        self.output = QLabel()
+
         self.layout.addWidget(self.gui)
         self.layout.addWidget(self.ip_address)
         self.layout.addWidget(self.ip_address_field)
         self.layout.addWidget(self.ports)
         self.layout.addWidget(self.ports_field)
         self.layout.addWidget(self.submit_button)
+        self.layout.addWidget(self.output_ipv4)
 
         self.gui.show()
         self.ip_address.show()
@@ -56,13 +67,33 @@ class Window(QDialog):
 
     def test(self):  # <- With "self"
         print("Test")
+        ip = self.get_ipv4_address()
+        print(self.ports_field.text())
+        ports_input = self.ports_field.text()
+        des_ports_input = ports_input.split(",")
+
+        print(des_ports_input)
+        for i in des_ports_input:
+            scan_string = ("Scanning ip {ip} and port {p} ".format(ip=ip,p=i))
+            self.output.setText(scan_string)
+            output_text = ""
+            result = scanner(ip,i)
+            if result is False:
+
+                self.output.setText(output_text)
+            else:
+                self.output.setText(output_text)
+
+
+    def get_ipv4_address(self):
         ip = self.ip_address_field.text()
         isip = check_ip(ip)
         print(isip)
-        print(self.ports_field.text())
-
-
-
+        if isip is False:
+            self.output_ipv4.setText("No IPv4")
+        else:
+            self.output_ipv4.setText("IPv4 address")
+        return ip
 
 
 def main():
