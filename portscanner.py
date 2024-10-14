@@ -69,23 +69,26 @@ class Window(QDialog):
     def test(self):  # <- With "self"
         print("Test")
         ip = self.get_ipv4_address()
+        self.get_scanning_for_ip_and_ports(ip)
+
+    def get_scanning_for_ip_and_ports(self, ip):
         print(self.ports_field.text())
         ports_input = self.ports_field.text()
         des_ports_input = ports_input.split(",")
         output_ports = ""
         print(des_ports_input)
         for i in des_ports_input:
-            scan_string = ("Scanning ip {ip} and port {p} ".format(ip=ip,p=i))
+            scan_string = ("Scanning ip {ip} and port {p} ".format(ip=ip, p=i))
             self.output.setText(scan_string)
             output_text = ""
-            result = scanner(ip,i)
+            result = scanner(ip, i)
             if result is False:
-               print("IP and port {port} aren't available".format(port=i))
-               output_text = "IP and port {port} aren't available".format(port=i)
-               output_ports = output_ports+output_text
+                print("IP and port {port} aren't available".format(port=i))
+                output_text = "IP and port {port} aren't available".format(port=i)
+                output_ports = output_ports + output_text + "\n"
             else:
                 output_string = "Port {port} open at ip {ip]"
-                output_ports = output_ports+output_string
+                output_ports = output_ports + output_string + "\n"
             self.output.setText(output_ports)
 
     def get_ipv4_address(self):
