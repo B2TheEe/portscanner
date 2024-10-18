@@ -3,7 +3,7 @@ import time
 from xmlrpc.client import Boolean
 
 from PyQt5.QtWidgets import *
-from ipaddress import ip_address
+from ipaddress import ip_address, IPv4Address
 import sys
 
 def scanner(ip,port):
@@ -19,12 +19,12 @@ def scanner(ip,port):
         result = False
         return result
 
-def check_ip(addr):
+def validIPAddress(IP: str) -> str:
     try:
-        socket.inet_aton(addr)
-        return True
-    except socket.error:
+        return "IPv4" if type(ip_address(IP)) is IPv4Address else "IPv6"
+    except ValueError:
         return False
+
 
 
 class Window(QDialog):
@@ -68,7 +68,7 @@ class Window(QDialog):
 
     def test(self):  # <- With "self"
         print("Test")
-        ip = self.get_ipv4_address()
+        ip = self.get_ip_address()
         self.get_scanning_for_ip_and_ports(ip)
 
     def get_scanning_for_ip_and_ports(self, ip):
@@ -91,14 +91,20 @@ class Window(QDialog):
                 output_ports = output_ports + output_string + "\n"
             self.output.setText(output_ports)
 
-    def get_ipv4_address(self):
+    def get_ip_address(self):
         ip = self.ip_address_field.text()
-        isip = check_ip(ip)
-        print(isip)
-        if isip is False:
-            self.output_ipv4.setText("No IPv4")
+        check_if_ip = validIPAddress(ip)
+        print(check_if_ip)
+        if check_if_ip is False:
+            self.output_ipv4.setText("No IPv4 or IPv6 address")
         else:
-            self.output_ipv4.setText("IPv4 address")
+            if check_if_ip ==  "IPv4":
+                self.output_ipv4.setText("Ipv4 address")
+            elif check_if_ip == "IPv6":
+                self.output_ipv4.setText("IPv6 address")
+            else:
+                self.output_ipv4.setText("IPv4 or IPv6 address")
+
         return ip
 
 
