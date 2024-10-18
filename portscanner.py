@@ -49,14 +49,7 @@ class Window(QDialog):
         self.output_ipv4 = QLabel()
         self.output = QLabel()
 
-
-        self.layout.addWidget(self.ip_address)
-        self.layout.addWidget(self.ip_address_field)
-        self.layout.addWidget(self.ports)
-        self.layout.addWidget(self.ports_field)
-        self.layout.addWidget(self.submit_button)
-        self.layout.addWidget(self.output_ipv4)
-        self.layout.addWidget(self.output)
+        self.set_layout()
 
         self.ip_address.show()
         self.ports.show()
@@ -65,6 +58,15 @@ class Window(QDialog):
         self.window.setLayout(self.layout)
         self.window.show()
         self.app.exec()
+
+    def set_layout(self):
+        self.layout.addWidget(self.ip_address)
+        self.layout.addWidget(self.ip_address_field)
+        self.layout.addWidget(self.ports)
+        self.layout.addWidget(self.ports_field)
+        self.layout.addWidget(self.submit_button)
+        self.layout.addWidget(self.output_ipv4)
+        self.layout.addWidget(self.output)
 
     def test(self):  # <- With "self"
         print("Test")
@@ -98,14 +100,17 @@ class Window(QDialog):
         if check_if_ip is False:
             self.output_ipv4.setText("No IPv4 or IPv6 address")
         else:
-            if check_if_ip ==  "IPv4":
-                self.output_ipv4.setText("Ipv4 address")
-            elif check_if_ip == "IPv6":
-                self.output_ipv4.setText("IPv6 address")
-            else:
-                self.output_ipv4.setText("IPv4 or IPv6 address")
+            self.check_ip_version(check_if_ip)
 
         return ip
+
+    def check_ip_version(self, check_if_ip):
+        if check_if_ip == "IPv4":
+            self.output_ipv4.setText("Ipv4 address")
+        elif check_if_ip == "IPv6":
+            self.output_ipv4.setText("IPv6 address")
+        else:
+            self.output_ipv4.setText("IPv4 or IPv6 address")
 
 
 def main():
