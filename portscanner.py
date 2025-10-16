@@ -51,16 +51,16 @@ class Window(QMainWindow):
 
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.settimeout(5)
+                s.settimeout(55)
                 s.connect((ip, int(port)))
                 s.sendall(b"Hello, world")
                 data = s.recv(1024)
 
                 print(f"Received {data!r}")
-                return data
+                return True
         except Exception as e:
             print(e)
-            return e
+            return False
 
     def validIPAddress(self,IP: str) -> str:
         try:
