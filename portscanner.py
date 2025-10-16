@@ -12,18 +12,13 @@ def scanner(ip,port):
         sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         sock.settimeout(0.5)
         sock.connect(ip,port)
-        print(f"Port {port} is open")
         result = True
         return result
     except:
         result = False
         return result
 
-def validIPAddress(IP: str) -> str:
-    try:
-        return "IPv4" if type(ip_address(IP)) is IPv4Address else "IPv6"
-    except ValueError:
-        return False
+
 
 
 
@@ -68,6 +63,12 @@ class Window(QDialog):
         self.layout.addWidget(self.output_ipv4)
         self.layout.addWidget(self.output)
 
+    def validIPAddress(self,IP: str) -> str:
+        try:
+            return "IPv4" if type(ip_address(IP)) is IPv4Address else "IPv6"
+        except ValueError:
+            return False
+
     def test(self):  # <- With "self"
         print("Test")
         ip = self.get_ip_address()
@@ -95,7 +96,7 @@ class Window(QDialog):
 
     def get_ip_address(self):
         ip = self.ip_address_field.text()
-        check_if_ip = validIPAddress(ip)
+        check_if_ip =self. validIPAddress(ip)
         print(check_if_ip)
         if check_if_ip is False:
             self.output_ipv4.setText("No IPv4 or IPv6 address")
