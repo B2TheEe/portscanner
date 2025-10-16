@@ -6,9 +6,9 @@ from PyQt5.QtWidgets import *
 from ipaddress import ip_address, IPv4Address
 import sys
 
-class Window(QDialog):
+class Window(QMainWindow):
     def __init__(self):
-        super(Window, self).__init__()
+        super(QMainWindow, self).__init__()
         self.app = QApplication([])
         self.app.setStyle('Fusion')
         title = "Port scanner"
@@ -57,8 +57,10 @@ class Window(QDialog):
                 data = s.recv(1024)
 
                 print(f"Received {data!r}")
+                return data
         except Exception as e:
             print(e)
+            return e
 
     def validIPAddress(self,IP: str) -> str:
         try:
