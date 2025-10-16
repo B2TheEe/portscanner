@@ -6,22 +6,6 @@ from PyQt5.QtWidgets import *
 from ipaddress import ip_address, IPv4Address
 import sys
 
-def scanner(ip,port):
-    result = None
-    try:
-        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        sock.settimeout(0.5)
-        sock.connect(ip,port)
-        result = True
-        return result
-    except:
-        result = False
-        return result
-
-
-
-
-
 class Window(QDialog):
     def __init__(self):
         super(Window, self).__init__()
@@ -63,6 +47,19 @@ class Window(QDialog):
         self.layout.addWidget(self.output_ipv4)
         self.layout.addWidget(self.output)
 
+    def scanner(self,ip, port):
+        try:
+            result = None
+            with  socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect(ip,port)
+            #sock.settimeout(0.5)
+           # sock.connect(ip, port)
+
+            result = True
+            return result
+        except Exception as e:
+            print(e)
+
     def validIPAddress(self,IP: str) -> str:
         try:
             return "IPv4" if type(ip_address(IP)) is IPv4Address else "IPv6"
@@ -84,14 +81,17 @@ class Window(QDialog):
             scan_string = ("Scanning ip {ip} and port {p} ".format(ip=ip, p=i))
             self.output.setText(scan_string)
             output_text = ""
-            result = scanner(ip, i)
+            result = self.scanner(ip, i)
             if result is False:
                 print("IP and port {port} aren't available".format(port=i))
                 output_text = "IP and port {port} aren't available".format(port=i)
                 output_ports = output_ports + output_text + "\n"
             else:
-                output_string = "Port {port} open at ip {ip]"
-                output_ports = output_ports + output_string + "\n"
+                """ 
+                output_string = "Port {port} open at ip {ip]".format(port=i,ip=ip)
+                output_ports = output_ports + output_string + "\n" 
+                """
+                print("{0} is open".format(i))
             self.output.setText(output_ports)
 
     def get_ip_address(self):
