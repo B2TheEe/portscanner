@@ -48,15 +48,15 @@ class Window(QDialog):
         self.layout.addWidget(self.output)
 
     def scanner(self,ip, port):
-        try:
-            result = None
-            with  socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect(ip,port)
-            #sock.settimeout(0.5)
-           # sock.connect(ip, port)
 
-            result = True
-            return result
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(5)
+                s.connect((ip, int(port)))
+                s.sendall(b"Hello, world")
+                data = s.recv(1024)
+
+                print(f"Received {data!r}")
         except Exception as e:
             print(e)
 
@@ -87,11 +87,9 @@ class Window(QDialog):
                 output_text = "IP and port {port} aren't available".format(port=i)
                 output_ports = output_ports + output_text + "\n"
             else:
-                """ 
-                output_string = "Port {port} open at ip {ip]".format(port=i,ip=ip)
-                output_ports = output_ports + output_string + "\n" 
-                """
                 print("{0} is open".format(i))
+                output_string = "{0} is open".format(i)
+                output_ports = output_ports + output_string + "\n"
             self.output.setText(output_ports)
 
     def get_ip_address(self):
