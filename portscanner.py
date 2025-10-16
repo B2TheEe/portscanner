@@ -23,7 +23,7 @@ class Window(QMainWindow):
         self.ports_field = QLineEdit()
 
         self.submit_button = QPushButton("submit")
-        self.submit_button.clicked.connect(self.test)
+        self.submit_button.clicked.connect(self.connect)
 
         self.output_ipv4 = QLabel()
         self.output = QLabel()
@@ -68,7 +68,7 @@ class Window(QMainWindow):
         except ValueError:
             return False
 
-    def test(self):  # <- With "self"
+    def connect(self):  # <- With "self"
         print("Test")
         ip = self.get_ip_address()
         self.get_scanning_for_ip_and_ports(ip)
